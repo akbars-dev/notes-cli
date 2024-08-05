@@ -22,6 +22,8 @@ cli.add_command(crud.list)
 cli.add_command(crud.add)
 cli.add_command(crud.show)
 cli.add_command(crud.update)
+cli.add_command(crud.delete)
+cli.add_command(crud.delete_note)
 
 if __name__ == "__main__":
     cli()

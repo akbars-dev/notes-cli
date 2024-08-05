@@ -90,3 +90,41 @@ def update(ctx: click.Context, note, status, idx):
            
 
 
+@click.command('delete')
+@click.option('--note', prompt="O'zgartirmoqchi bo'lgan note nomini yozing", help="Note nomini yozish kerak")
+@click.option('--idx', prompt="TaskId yozing", help="Task aydisini yozish yozish kerak")
+@click.pass_context
+def delete(ctx: click.Context, note, idx):
+    file_path = f"{ctx.obj['notes_dir']}/{note}.txt"
+    isFile = os.path.exists(file_path)
+    if not isFile:
+        return click.echo("NOTE NOT FOUND")
+    
+
+    with open(file_path, "r") as file:
+        tasks = file.read().split('\n')
+        for task in enumerate(tasks):
+            match = re.search(r'\[(\d+)\]:', task)
+            if match:
+                id = match.group(1)
+                if id == idx:
+                    tasks.remove(task)
+                    with open(file_path, 'w') as f:
+                        f.write("\n".join(tasks))                   
+                    return click.echo("\n".join(tasks) + "\n\n--TASK DELETED --")
+
+        return click.echo("TASK NOT FOUND")  
+    
+
+@click.command('delete-note')
+@click.option('--note', prompt="O'zgartirmoqchi bo'lgan note nomini yozing", help="Note nomini yozish kerak")
+@click.pass_context
+def delete_note(ctx: click.Context, note):
+    file_path = f"{ctx.obj['notes_dir']}/{note}.txt"
+    isFile = os.path.exists(file_path)
+    if not isFile:
+        return click.echo("NOTE NOT FOUND")
+    
+
+    os.remove(file_path)
+    return click.echo("-- NOTE DELETED --")  
