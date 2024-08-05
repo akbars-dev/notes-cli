@@ -1,2 +1,5 @@
 **/venv
 **/__pychache__
+**/build
+**/dist
+**/notes.spec
